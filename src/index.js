@@ -9,12 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-    morgan(
-        "[:date[web]] ':method :url' :status :response-time ms ':user-agent'",
-        {
-            stream: LoggerConfig.accessLogStream,
-        }
-    )
+    morgan("myFormat", {
+        stream: LoggerConfig.accessLogStream,
+    })
 );
 app.use("/api", apiRoutes);
 
