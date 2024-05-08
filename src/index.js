@@ -1,14 +1,23 @@
 const express = require("express");
 const morgan = require("morgan");
 const { ServerConfig, LoggerConfig } = require("./config");
+const apiRoutes = require("./routes");
 
 const PORT = ServerConfig.PORT;
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev", { stream: LoggerConfig.accessLogStream }));
+app.use(
+    morgan(
+        "[:date[web]] ':method :url' :status :response-time ms ':user-agent'",
+        {
+            stream: LoggerConfig.accessLogStream,
+        }
+    )
+);
+app.use("/api", apiRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Server is Up and Running on PORT:- ${PORT}`);
+    console.log(`Server is Up and Running on PORT:- ${PORT}`);
 });
