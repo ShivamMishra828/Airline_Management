@@ -55,6 +55,12 @@ async function getAllAirplanes() {
 async function updateAirplane(id, data) {
     try {
         const airplane = await airplaneRepository.update(id, data);
+        if (airplane[0] == 0) {
+            throw new AppError(
+                "Can't update the given airplane object",
+                StatusCodes.BAD_REQUEST
+            );
+        }
         return airplane;
     } catch (error) {
         if (error.name == "SequelizeUniqueConstraintError") {
@@ -62,6 +68,9 @@ async function updateAirplane(id, data) {
                 "Airplane with given Model Number is already exists in database.",
                 StatusCodes.BAD_REQUEST
             );
+        }
+        if (error.statusCode == StatusCodes.BAD_REQUEST) {
+            throw new AppError(error.explanation, error.statusCode);
         }
         if (error.statusCode == StatusCodes.NOT_FOUND) {
             throw new AppError(
