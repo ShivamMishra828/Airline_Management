@@ -2,17 +2,17 @@ const { StatusCodes } = require("http-status-codes");
 const { ErrorResponse } = require("../utils/common");
 const AppError = require("../utils/error/app-error");
 
-async function validateAirplaneIncomingRequest(req, res, next) {
-    if (!req.body.modelNumber) {
+async function validateCityIncomingRequest(req, res, next) {
+    if (!req.body.name) {
         return res
             .status(StatusCodes.BAD_REQUEST)
             .json(
                 new ErrorResponse(
                     new AppError(
-                        "Model Number is required",
+                        "City Name is required",
                         StatusCodes.BAD_REQUEST
                     ),
-                    "Model Number is not present in req.body."
+                    "City name is not present in req.body"
                 )
             );
     }
@@ -21,5 +21,5 @@ async function validateAirplaneIncomingRequest(req, res, next) {
 }
 
 module.exports = {
-    validateAirplaneIncomingRequest,
+    validateCityIncomingRequest,
 };
