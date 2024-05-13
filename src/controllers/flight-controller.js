@@ -50,7 +50,53 @@ async function getAllFlights(req, res) {
     }
 }
 
+async function getFlightById(req, res) {
+    try {
+        const flight = await FlightService.getFlight(req.params.id);
+        return res
+            .status(StatusCodes.OK)
+            .json(
+                new SuccessResponse(
+                    flight,
+                    "Successfully fetched data of flight"
+                )
+            );
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(
+                new ErrorResponse(error, "Can't fetch data of Flight Object")
+            );
+    }
+}
+
+async function updateSeats(req, res) {
+    try {
+        const response = await FlightService.updateSeats({
+            flightId: req.params.id,
+            seats: req.body.seats,
+            dec: req.body.dec,
+        });
+        return res
+            .status(StatusCodes.OK)
+            .json(
+                new SuccessResponse(
+                    response,
+                    "Successfully updated data of seats"
+                )
+            );
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(
+                new ErrorResponse(error, "Can't fetch data of Flight Object")
+            );
+    }
+}
+
 module.exports = {
     createFlight,
     getAllFlights,
+    getFlightById,
+    updateSeats,
 };
